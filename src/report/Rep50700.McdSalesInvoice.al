@@ -16,7 +16,7 @@ report 50700 "Mcd Sales Invoice"
             column(No_SalesInvHeader; "No.")
             {
             }
-            column(payamount;-1 * payamount)
+            column(payamount; -1 * payamount)
             {
             }
             column(remainamount; remainamount)
@@ -27,105 +27,115 @@ report 50700 "Mcd Sales Invoice"
             }
             dataitem("Sales Invoice Line"; "Sales Invoice Line")
             {
-                DataItemLink = "Document No."=FIELD("No.");
+                DataItemLink = "Document No." = FIELD("No.");
                 DataItemTableView = SORTING("Document No.", "Line No.");
 
                 dataitem("Value Entry"; "Value Entry")
                 {
-                    DataItemLink = "Document No."=FIELD("Document No."), "Document Line No."=FIELD("Line No.");
+                    DataItemLink = "Document No." = FIELD("Document No."), "Document Line No." = FIELD("Line No.");
 
                     trigger OnAfterGetRecord()
                     begin
-                        i+=1;
+                        i += 1;
                         ilerec.RESET;
                         ilerec.GET("Value Entry"."Item Ledger Entry No.");
-                        IF(ilerec."Serial No." = '') and (ilerec."Lot No." = '')THEN CurrReport.SKIP;
+                        IF (ilerec."Serial No." = '') and (ilerec."Lot No." = '') THEN CurrReport.SKIP;
                         IF i = 1 THEN begin
-                            if ilerec."Serial No." <> '' then serialtext:='Serial No. : ' + ilerec."Serial No."
+                            if ilerec."Serial No." <> '' then
+                                serialtext := 'Serial No. : ' + ilerec."Serial No."
                             else
-                                serialtext:='Lot No. : ' + ilerec."Lot No." end
-                        ELSE
-                        begin
-                            if ilerec."Serial No." <> '' then serialtext:=ilerec."Serial No."
+                                serialtext := 'Lot No. : ' + ilerec."Lot No."
+                        end
+                        ELSE begin
+                            if ilerec."Serial No." <> '' then
+                                serialtext := ilerec."Serial No."
                             else
-                                serialtext:=ilerec."Lot No.";
+                                serialtext := ilerec."Lot No.";
                         end;
                         IF NEXT <> 0 THEN BEGIN
                             ilerec.RESET;
                             ilerec.GET("Value Entry"."Item Ledger Entry No.");
-                            if ilerec."Serial No." <> '' then serialtext+=',' + ilerec."Serial No."
+                            if ilerec."Serial No." <> '' then
+                                serialtext += ',' + ilerec."Serial No."
                             else
-                                serialtext+=',' + ilerec."Lot No.";
+                                serialtext += ',' + ilerec."Lot No.";
                         END;
                         IF NEXT <> 0 THEN BEGIN
                             ilerec.RESET;
                             ilerec.GET("Value Entry"."Item Ledger Entry No.");
-                            if ilerec."Serial No." <> '' then serialtext+=',' + ilerec."Serial No."
+                            if ilerec."Serial No." <> '' then
+                                serialtext += ',' + ilerec."Serial No."
                             else
-                                serialtext+=',' + ilerec."Lot No.";
+                                serialtext += ',' + ilerec."Lot No.";
                         END;
                         IF NEXT <> 0 THEN BEGIN
                             ilerec.RESET;
                             ilerec.GET("Value Entry"."Item Ledger Entry No.");
-                            if ilerec."Serial No." <> '' then serialtext+=',' + ilerec."Serial No."
+                            if ilerec."Serial No." <> '' then
+                                serialtext += ',' + ilerec."Serial No."
                             else
-                                serialtext+=',' + ilerec."Lot No.";
+                                serialtext += ',' + ilerec."Lot No.";
                         END;
                         IF NEXT <> 0 THEN BEGIN
                             ilerec.RESET;
                             ilerec.GET("Value Entry"."Item Ledger Entry No.");
-                            if ilerec."Serial No." <> '' then serialtext+=',' + ilerec."Serial No."
+                            if ilerec."Serial No." <> '' then
+                                serialtext += ',' + ilerec."Serial No."
                             else
-                                serialtext+=',' + ilerec."Lot No.";
+                                serialtext += ',' + ilerec."Lot No.";
                         END;
                         IF NEXT <> 0 THEN BEGIN
                             ilerec.RESET;
                             ilerec.GET("Value Entry"."Item Ledger Entry No.");
-                            if ilerec."Serial No." <> '' then serialtext+=',' + ilerec."Serial No."
+                            if ilerec."Serial No." <> '' then
+                                serialtext += ',' + ilerec."Serial No."
                             else
-                                serialtext+=',' + ilerec."Lot No.";
+                                serialtext += ',' + ilerec."Lot No.";
                         END;
                         IF NEXT <> 0 THEN BEGIN
                             ilerec.RESET;
                             ilerec.GET("Value Entry"."Item Ledger Entry No.");
-                            if ilerec."Serial No." <> '' then serialtext+=',' + ilerec."Serial No."
+                            if ilerec."Serial No." <> '' then
+                                serialtext += ',' + ilerec."Serial No."
                             else
-                                serialtext+=',' + ilerec."Lot No.";
+                                serialtext += ',' + ilerec."Lot No.";
                         END;
                         IF NEXT <> 0 THEN BEGIN
                             ilerec.RESET;
                             ilerec.GET("Value Entry"."Item Ledger Entry No.");
-                            if ilerec."Serial No." <> '' then serialtext+=',' + ilerec."Serial No."
+                            if ilerec."Serial No." <> '' then
+                                serialtext += ',' + ilerec."Serial No."
                             else
-                                serialtext+=',' + ilerec."Lot No.";
+                                serialtext += ',' + ilerec."Lot No.";
                         END;
                         IF NEXT <> 0 THEN BEGIN
                             ilerec.RESET;
                             ilerec.GET("Value Entry"."Item Ledger Entry No.");
-                            if ilerec."Serial No." <> '' then serialtext+=',' + ilerec."Serial No."
+                            if ilerec."Serial No." <> '' then
+                                serialtext += ',' + ilerec."Serial No."
                             else
-                                serialtext+=',' + ilerec."Lot No.";
+                                serialtext += ',' + ilerec."Lot No.";
                         END;
                         WITH TempSalesInvoiceLine DO BEGIN
                             INIT;
-                            "Document No.":="Sales Invoice Header"."No.";
-                            "Line No.":=HighestLineNo + 10;
-                            HighestLineNo:="Line No.";
+                            "Document No." := "Sales Invoice Header"."No.";
+                            "Line No." := HighestLineNo + 10;
+                            HighestLineNo := "Line No.";
                         END;
-                        IF STRLEN(serialtext) <= MAXSTRLEN(TempSalesInvoiceLine.Description)THEN BEGIN
-                            TempSalesInvoiceLine.Description:=serialtext;
-                            TempSalesInvoiceLine."Description 2":='';
+                        IF STRLEN(serialtext) <= MAXSTRLEN(TempSalesInvoiceLine.Description) THEN BEGIN
+                            TempSalesInvoiceLine.Description := serialtext;
+                            TempSalesInvoiceLine."Description 2" := '';
                         END
-                        ELSE
-                        BEGIN
-                            SpacePointer:=MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
-                            WHILE(SpacePointer > 1) AND (serialtext[SpacePointer] <> ' ')DO SpacePointer:=SpacePointer - 1;
-                            IF SpacePointer = 1 THEN SpacePointer:=MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
-                            TempSalesInvoiceLine.Description:=COPYSTR(serialtext, 1, SpacePointer - 1);
-                            TempSalesInvoiceLine."Description 2":=COPYSTR(COPYSTR(serialtext, SpacePointer + 1), 1, MAXSTRLEN(TempSalesInvoiceLine."Description 2"));
+                        ELSE BEGIN
+                            SpacePointer := MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
+                            WHILE (SpacePointer > 1) AND (serialtext[SpacePointer] <> ' ') DO SpacePointer := SpacePointer - 1;
+                            IF SpacePointer = 1 THEN SpacePointer := MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
+                            TempSalesInvoiceLine.Description := COPYSTR(serialtext, 1, SpacePointer - 1);
+                            TempSalesInvoiceLine."Description 2" := COPYSTR(COPYSTR(serialtext, SpacePointer + 1), 1, MAXSTRLEN(TempSalesInvoiceLine."Description 2"));
                         END;
                         TempSalesInvoiceLine.INSERT;
                     end;
+
                     trigger OnPreDataItem()
                     begin
                         IF NOT PrintSerial THEN CurrReport.BREAK;
@@ -133,28 +143,27 @@ report 50700 "Mcd Sales Invoice"
                 }
                 dataitem(SalesLineComments; "Sales Comment Line")
                 {
-                    DataItemLink = "No."=FIELD("Document No."), "Document Line No."=FIELD("Line No.");
-                    DataItemTableView = SORTING("Document Type", "No.", "Document Line No.", "Line No.")WHERE("Document Type"=CONST("Posted Invoice"), "Print On Invoice"=CONST(True));
+                    DataItemLink = "No." = FIELD("Document No."), "Document Line No." = FIELD("Line No.");
+                    DataItemTableView = SORTING("Document Type", "No.", "Document Line No.", "Line No.") WHERE("Document Type" = CONST("Posted Invoice"), "Print On Invoice" = CONST(True));
 
                     trigger OnAfterGetRecord()
                     begin
                         WITH TempSalesInvoiceLine DO BEGIN
                             INIT;
-                            "Document No.":="Sales Invoice Header"."No.";
-                            "Line No.":=HighestLineNo + 10;
-                            HighestLineNo:="Line No.";
+                            "Document No." := "Sales Invoice Header"."No.";
+                            "Line No." := HighestLineNo + 10;
+                            HighestLineNo := "Line No.";
                         END;
-                        IF STRLEN(Comment) <= MAXSTRLEN(TempSalesInvoiceLine.Description)THEN BEGIN
-                            TempSalesInvoiceLine.Description:=Comment;
-                            TempSalesInvoiceLine."Description 2":='';
+                        IF STRLEN(Comment) <= MAXSTRLEN(TempSalesInvoiceLine.Description) THEN BEGIN
+                            TempSalesInvoiceLine.Description := Comment;
+                            TempSalesInvoiceLine."Description 2" := '';
                         END
-                        ELSE
-                        BEGIN
-                            SpacePointer:=MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
-                            WHILE(SpacePointer > 1) AND (Comment[SpacePointer] <> ' ')DO SpacePointer:=SpacePointer - 1;
-                            IF SpacePointer = 1 THEN SpacePointer:=MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
-                            TempSalesInvoiceLine.Description:=COPYSTR(Comment, 1, SpacePointer - 1);
-                            TempSalesInvoiceLine."Description 2":=COPYSTR(COPYSTR(Comment, SpacePointer + 1), 1, MAXSTRLEN(TempSalesInvoiceLine."Description 2"));
+                        ELSE BEGIN
+                            SpacePointer := MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
+                            WHILE (SpacePointer > 1) AND (Comment[SpacePointer] <> ' ') DO SpacePointer := SpacePointer - 1;
+                            IF SpacePointer = 1 THEN SpacePointer := MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
+                            TempSalesInvoiceLine.Description := COPYSTR(Comment, 1, SpacePointer - 1);
+                            TempSalesInvoiceLine."Description 2" := COPYSTR(COPYSTR(Comment, SpacePointer + 1), 1, MAXSTRLEN(TempSalesInvoiceLine."Description 2"));
                         END;
                         TempSalesInvoiceLine.INSERT;
                     end;
@@ -162,13 +171,14 @@ report 50700 "Mcd Sales Invoice"
                 trigger OnAfterGetRecord()
                 begin
                     if skipzerolines then if type = type::item then if quantity = 0 then CurrReport.skip;
-                    TempSalesInvoiceLine:="Sales Invoice Line";
+                    TempSalesInvoiceLine := "Sales Invoice Line";
                     TempSalesInvoiceLine.INSERT;
-                    TempSalesInvoiceLineAsm:="Sales Invoice Line";
+                    TempSalesInvoiceLineAsm := "Sales Invoice Line";
                     TempSalesInvoiceLineAsm.INSERT;
-                    HighestLineNo:="Line No.";
-                    i:=0;
+                    HighestLineNo := "Line No.";
+                    i := 0;
                 end;
+
                 trigger OnPreDataItem()
                 begin
                     TempSalesInvoiceLine.RESET;
@@ -179,47 +189,48 @@ report 50700 "Mcd Sales Invoice"
             }
             dataitem("Sales Comment Line"; "Sales Comment Line")
             {
-                DataItemLink = "No."=FIELD("No.");
-                DataItemTableView = SORTING("Document Type", "No.", "Document Line No.", "Line No.")WHERE("Document Type"=CONST("Posted Invoice"), "Print On Invoice"=CONST(true), "Document Line No."=CONST(0));
+                DataItemLink = "No." = FIELD("No.");
+                DataItemTableView = SORTING("Document Type", "No.", "Document Line No.", "Line No.") WHERE("Document Type" = CONST("Posted Invoice"), "Print On Invoice" = CONST(true), "Document Line No." = CONST(0));
 
                 column(DisplayAdditionalFeeNote; DisplayAdditionalFeeNote)
                 {
                 }
                 trigger OnAfterGetRecord()
                 begin
-                    j+=1;
+                    j += 1;
                     WITH TempSalesInvoiceLine DO BEGIN
                         INIT;
-                        "Document No.":="Sales Invoice Header"."No.";
-                        "Line No.":=HighestLineNo + 1000;
-                        HighestLineNo:="Line No.";
+                        "Document No." := "Sales Invoice Header"."No.";
+                        "Line No." := HighestLineNo + 1000;
+                        HighestLineNo := "Line No.";
                     END;
                     // if j = 1 then
-                    comment:=comment;
-                    IF STRLEN(Comment) <= MAXSTRLEN(TempSalesInvoiceLine.Description)THEN BEGIN
-                        if j = 1 then TempSalesInvoiceLine.Description:='Order Comments: ' + comment
+                    comment := comment;
+                    IF STRLEN(Comment) <= MAXSTRLEN(TempSalesInvoiceLine.Description) THEN BEGIN
+                        if j = 1 then
+                            TempSalesInvoiceLine.Description := 'Order Comments: ' + comment
                         else
-                            TempSalesInvoiceLine."Description":=Comment;
+                            TempSalesInvoiceLine."Description" := Comment;
                         //TempSalesInvoiceLine.Description := Comment;
-                        TempSalesInvoiceLine."Description 2":='';
+                        TempSalesInvoiceLine."Description 2" := '';
                     END
-                    ELSE
-                    BEGIN
-                        SpacePointer:=MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
-                        WHILE(SpacePointer > 1) AND (Comment[SpacePointer] <> ' ')DO SpacePointer:=SpacePointer - 1;
-                        IF SpacePointer = 1 THEN SpacePointer:=MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
-                        TempSalesInvoiceLine.Description:=COPYSTR(Comment, 1, SpacePointer - 1);
-                        TempSalesInvoiceLine."Description 2":=COPYSTR(COPYSTR(Comment, SpacePointer + 1), 1, MAXSTRLEN(TempSalesInvoiceLine."Description 2"));
+                    ELSE BEGIN
+                        SpacePointer := MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
+                        WHILE (SpacePointer > 1) AND (Comment[SpacePointer] <> ' ') DO SpacePointer := SpacePointer - 1;
+                        IF SpacePointer = 1 THEN SpacePointer := MAXSTRLEN(TempSalesInvoiceLine.Description) + 1;
+                        TempSalesInvoiceLine.Description := COPYSTR(Comment, 1, SpacePointer - 1);
+                        TempSalesInvoiceLine."Description 2" := COPYSTR(COPYSTR(Comment, SpacePointer + 1), 1, MAXSTRLEN(TempSalesInvoiceLine."Description 2"));
                     END;
                     TempSalesInvoiceLine.INSERT;
                 end;
+
                 trigger OnPreDataItem()
                 begin
                     WITH TempSalesInvoiceLine DO BEGIN
                         INIT;
-                        "Document No.":="Sales Invoice Header"."No.";
-                        "Line No.":=HighestLineNo + 1000;
-                        HighestLineNo:="Line No.";
+                        "Document No." := "Sales Invoice Header"."No.";
+                        "Line No." := HighestLineNo + 1000;
+                        HighestLineNo := "Line No.";
                     END;
                     TempSalesInvoiceLine.INSERT;
                 end;
@@ -230,7 +241,7 @@ report 50700 "Mcd Sales Invoice"
 
                 dataitem(PageLoop; Integer)
                 {
-                    DataItemTableView = SORTING(Number)WHERE(Number=CONST(1));
+                    DataItemTableView = SORTING(Number) WHERE(Number = CONST(1));
 
                     column(CompanyInfo2Picture; CompanyInfo2.Picture)
                     {
@@ -424,15 +435,15 @@ report 50700 "Mcd Sales Invoice"
                         }
                         column(OrderedQuantity; OrderedQuantity)
                         {
-                        DecimalPlaces = 0: 5;
+                            DecimalPlaces = 0 : 5;
                         }
                         column(TempSalesInvoiceLineQty; TempSalesInvoiceLine.Quantity)
                         {
-                        DecimalPlaces = 0: 5;
+                            DecimalPlaces = 0 : 5;
                         }
                         column(UnitPriceToPrint; UnitPriceToPrint)
                         {
-                        DecimalPlaces = 2: 5;
+                            DecimalPlaces = 2 : 5;
                         }
                         column(LowDescriptionToPrint; LowDescriptionToPrint)
                         {
@@ -536,7 +547,7 @@ report 50700 "Mcd Sales Invoice"
                             }
                             column(TempPostedAsmLineQuantity; TempPostedAsmLine.Quantity)
                             {
-                            DecimalPlaces = 0: 5;
+                                DecimalPlaces = 0 : 5;
                             }
                             column(TempPostedAsmLineDesc; BlanksForIndent + TempPostedAsmLine.Description)
                             {
@@ -546,16 +557,17 @@ report 50700 "Mcd Sales Invoice"
                             }
                             trigger OnAfterGetRecord()
                             begin
-                                IF Number = 1 THEN TempPostedAsmLine.FINDSET
-                                ELSE
-                                BEGIN
+                                IF Number = 1 THEN
+                                    TempPostedAsmLine.FINDSET
+                                ELSE BEGIN
                                     TempPostedAsmLine.NEXT;
-                                    TaxLiable:=0;
-                                    AmountExclInvDisc:=0;
-                                    TempSalesInvoiceLine.Amount:=0;
-                                    TempSalesInvoiceLine."Amount Including VAT":=0;
+                                    TaxLiable := 0;
+                                    AmountExclInvDisc := 0;
+                                    TempSalesInvoiceLine.Amount := 0;
+                                    TempSalesInvoiceLine."Amount Including VAT" := 0;
                                 END;
                             end;
+
                             trigger OnPreDataItem()
                             begin
                                 CLEAR(TempPostedAsmLine);
@@ -564,29 +576,33 @@ report 50700 "Mcd Sales Invoice"
                         }
                         trigger OnAfterGetRecord()
                         begin
-                            OnLineNumber:=OnLineNumber + 1;
+                            OnLineNumber := OnLineNumber + 1;
                             WITH TempSalesInvoiceLine DO BEGIN
-                                IF OnLineNumber = 1 THEN FIND('-')
+                                IF OnLineNumber = 1 THEN
+                                    FIND('-')
                                 ELSE
                                     NEXT;
-                                OrderedQuantity:=0;
-                                IF "Sales Invoice Header"."Order No." = '' THEN OrderedQuantity:=Quantity
-                                ELSE IF OrderLine.GET(1, "Sales Invoice Header"."Order No.", "Line No.")THEN OrderedQuantity:=OrderLine.Quantity
-                                    ELSE
-                                    BEGIN
-                                        ShipmentLine.SETRANGE("Order No.", "Sales Invoice Header"."Order No.");
-                                        ShipmentLine.SETRANGE("Order Line No.", "Line No.");
-                                        IF ShipmentLine.FIND('-')THEN REPEAT OrderedQuantity:=OrderedQuantity + ShipmentLine.Quantity;
-                                            UNTIL 0 = ShipmentLine.NEXT;
-                                    END;
-                                DescriptionToPrint:=Description + ' ' + "Description 2";
+                                OrderedQuantity := 0;
+                                IF "Sales Invoice Header"."Order No." = '' THEN
+                                    OrderedQuantity := Quantity
+                                ELSE IF OrderLine.GET(1, "Sales Invoice Header"."Order No.", "Line No.") THEN
+                                    OrderedQuantity := OrderLine.Quantity
+                                ELSE BEGIN
+                                    ShipmentLine.SETRANGE("Order No.", "Sales Invoice Header"."Order No.");
+                                    ShipmentLine.SETRANGE("Order Line No.", "Line No.");
+                                    IF ShipmentLine.FIND('-') THEN
+                                        REPEAT
+                                            OrderedQuantity := OrderedQuantity + ShipmentLine.Quantity;
+                                        UNTIL 0 = ShipmentLine.NEXT;
+                                END;
+                                DescriptionToPrint := Description + ' ' + "Description 2";
                                 IF Type = 0 THEN BEGIN
-                                    "No.":='';
-                                    "Unit of Measure":='';
-                                    Amount:=0;
-                                    "Amount Including VAT":=0;
-                                    "Inv. Discount Amount":=0;
-                                    Quantity:=0;
+                                    "No." := '';
+                                    "Unit of Measure" := '';
+                                    Amount := 0;
+                                    "Amount Including VAT" := 0;
+                                    "Inv. Discount Amount" := 0;
+                                    Quantity := 0;
                                 END; //ELSE
                                 // IF Type = Type::"G/L Account" THEN
                                 //    "No." := '';
@@ -597,29 +613,32 @@ report 50700 "Mcd Sales Invoice"
                                 // HighDescriptionToPrint := '';
                                 // LowDescriptionToPrint := DescriptionToPrint;
                                 //END;
-                                LowDescriptionToPrint:=DescriptionToPrint;
-                                IF Amount <> "Amount Including VAT" THEN TaxLiable:=Amount
+                                LowDescriptionToPrint := DescriptionToPrint;
+                                IF Amount <> "Amount Including VAT" THEN
+                                    TaxLiable := Amount
                                 ELSE
-                                    TaxLiable:=0;
-                                AmountExclInvDisc:=Amount + "Inv. Discount Amount";
-                                IF Quantity = 0 THEN UnitPriceToPrint:=0 // so it won't print
+                                    TaxLiable := 0;
+                                AmountExclInvDisc := Amount + "Inv. Discount Amount";
+                                IF Quantity = 0 THEN
+                                    UnitPriceToPrint := 0 // so it won't print
                                 ELSE
-                                    UnitPriceToPrint:=ROUND(AmountExclInvDisc / Quantity, 0.00001);
+                                    UnitPriceToPrint := ROUND(AmountExclInvDisc / Quantity, 0.00001);
                             END;
                             CollectAsmInformation(TempSalesInvoiceLine);
                         end;
+
                         trigger OnPreDataItem()
                         begin
                             CLEAR(TaxLiable);
                             CLEAR(AmountExclInvDisc);
-                            NumberOfLines:=TempSalesInvoiceLine.COUNT;
+                            NumberOfLines := TempSalesInvoiceLine.COUNT;
                             SETRANGE(Number, 1, NumberOfLines);
-                            OnLineNumber:=0;
+                            OnLineNumber := 0;
                         end;
                     }
                     dataitem(LineFee; Integer)
                     {
-                        DataItemTableView = SORTING(Number)ORDER(Ascending)WHERE(Number=FILTER(1..));
+                        DataItemTableView = SORTING(Number) ORDER(Ascending) WHERE(Number = FILTER(1 ..));
 
                         column(LineFeeCaptionLbl; TempLineFeeNoteOnReportHist.ReportText)
                         {
@@ -628,40 +647,42 @@ report 50700 "Mcd Sales Invoice"
                         begin
                             IF NOT DisplayAdditionalFeeNote THEN CurrReport.BREAK;
                             IF Number = 1 THEN BEGIN
-                                IF NOT TempLineFeeNoteOnReportHist.FINDSET THEN CurrReport.BREAK END
+                                IF NOT TempLineFeeNoteOnReportHist.FINDSET THEN CurrReport.BREAK
+                            END
                             ELSE IF TempLineFeeNoteOnReportHist.NEXT = 0 THEN CurrReport.BREAK;
                         end;
                     }
                 }
                 trigger OnAfterGetRecord()
                 begin
-                    CurrReport.PAGENO:=1;
+                    CurrReport.PAGENO := 1;
                     IF CopyNo = NoLoops THEN BEGIN
                         IF NOT CurrReport.PREVIEW THEN SalesInvPrinted.RUN("Sales Invoice Header");
                         CurrReport.BREAK;
                     END;
-                    CopyNo:=CopyNo + 1;
+                    CopyNo := CopyNo + 1;
                     IF CopyNo = 1 THEN // Original
- CLEAR(CopyTxt)
+                        CLEAR(CopyTxt)
                     ELSE
-                        CopyTxt:=Text000;
+                        CopyTxt := Text000;
                 end;
+
                 trigger OnPreDataItem()
                 begin
-                    NoLoops:=1 + ABS(NoCopies) + Customer."Invoice Copies";
-                    IF NoLoops <= 0 THEN NoLoops:=1;
-                    CopyNo:=0;
+                    NoLoops := 1 + ABS(NoCopies) + Customer."Invoice Copies";
+                    IF NoLoops <= 0 THEN NoLoops := 1;
+                    CopyNo := 0;
                 end;
             }
             trigger OnAfterGetRecord()
             var
                 Custledg: Record "Cust. Ledger Entry";
             begin
-                payamount:=0;
-                remainamount:=0;
-                remainint:=0;
+                payamount := 0;
+                remainamount := 0;
+                remainint := 0;
                 if showremain then begin
-                    remainint:=1;
+                    remainint := 1;
                     CalcFields(Amount, "Amount Including VAT", "Remaining Amount");
                     //  Custledg.reset;
                     //  Custledg.SetCurrentKey("Document No.", "Posting Date");
@@ -670,107 +691,117 @@ report 50700 "Mcd Sales Invoice"
                     //  if Custledg.findset then begin
                     //      CalcFields("Remaining Amount", Amount);
                     //   if Custledg."Remaining Amount" <> Custledg.Amount then begin
-                    payamount:="Amount Including VAT" - "Remaining Amount";
-                    remainamount:="Remaining Amount";
-                //   end;
-                // end;
+                    payamount := "Amount Including VAT" - "Remaining Amount";
+                    remainamount := "Remaining Amount";
+                    //   end;
+                    // end;
                 end;
-                IF PrintCompany THEN IF RespCenter.GET("Responsibility Center")THEN BEGIN
+                IF PrintCompany THEN
+                    IF RespCenter.GET("Responsibility Center") THEN BEGIN
                         FormatAddress.RespCenter(CompanyAddress, RespCenter);
-                    //   CompanyInformation."Phone No." := RespCenter."Phone No.";
-                    //   CompanyInformation."Fax No." := RespCenter."Fax No.";
+                        //   CompanyInformation."Phone No." := RespCenter."Phone No.";
+                        //   CompanyInformation."Fax No." := RespCenter."Fax No.";
                     END;
                 //CurrReport.LANGUAGE := Language.GetLanguageID("Language Code");
                 IF CompanyAddress[4] = '' THEN BEGIN
-                    CompanyAddress[4]:='Phone No.:' + CompanyInformation."Phone No.";
-                    CompanyAddress[5]:='E-Mail: ' + CompanyInformation."e-mail";
+                    CompanyAddress[4] := 'Phone No.:' + CompanyInformation."Phone No.";
+                    CompanyAddress[5] := 'E-Mail: ' + CompanyInformation."e-mail";
                 END
-                ELSE
-                BEGIN
-                    CompanyAddress[5]:='Phone No.:' + CompanyInformation."Phone No.";
-                    CompanyAddress[6]:='E-Mail: ' + CompanyInformation."E-mail";
+                ELSE BEGIN
+                    CompanyAddress[5] := 'Phone No.:' + CompanyInformation."Phone No.";
+                    CompanyAddress[6] := 'E-Mail: ' + CompanyInformation."E-mail";
                 END;
-                IF "Salesperson Code" = '' THEN CLEAR(SalesPurchPerson)
+                IF "Salesperson Code" = '' THEN
+                    CLEAR(SalesPurchPerson)
                 ELSE
                     SalesPurchPerson.GET("Salesperson Code");
-                IF NOT Customer.GET("Bill-to Customer No.")THEN BEGIN
+                IF NOT Customer.GET("Bill-to Customer No.") THEN BEGIN
                     CLEAR(Customer);
-                    "Bill-to Name":=Text009;
-                    "Ship-to Name":=Text009;
+                    "Bill-to Name" := Text009;
+                    "Ship-to Name" := Text009;
                 END;
-                j:=0;
-                DocumentText:=USText000;
-                IF "Prepayment Invoice" THEN DocumentText:=USText001;
+                j := 0;
+                DocumentText := USText000;
+                IF "Prepayment Invoice" THEN DocumentText := USText001;
                 FormatAddress.SalesInvBillTo(BillToAddress, "Sales Invoice Header");
                 FormatAddress.SalesInvShipTo(ShipToAddress, ShipToAddress, "Sales Invoice Header");
-                IF "Payment Terms Code" = '' THEN CLEAR(PaymentTerms)
+                IF "Payment Terms Code" = '' THEN
+                    CLEAR(PaymentTerms)
                 ELSE
                     PaymentTerms.GET("Payment Terms Code");
-                IF "Shipment Method Code" = '' THEN CLEAR(ShipmentMethod)
+                IF "Shipment Method Code" = '' THEN
+                    CLEAR(ShipmentMethod)
                 ELSE
                     ShipmentMethod.GET("Shipment Method Code");
                 IF "Currency Code" = '' THEN BEGIN
                     GLSetup.TESTFIELD("LCY Code");
-                    TotalCaption:=STRSUBSTNO(TotalCaptionTxt, GLSetup."LCY Code");
-                    AmountExemptfromSalesTaxCaption:=STRSUBSTNO(AmountExemptfromSalesTaxCaptionTxt, GLSetup."LCY Code");
-                    AmountSubjecttoSalesTaxCaption:=STRSUBSTNO(AmountSubjecttoSalesTaxCaptionTxt, GLSetup."LCY Code");
+                    TotalCaption := STRSUBSTNO(TotalCaptionTxt, GLSetup."LCY Code");
+                    AmountExemptfromSalesTaxCaption := STRSUBSTNO(AmountExemptfromSalesTaxCaptionTxt, GLSetup."LCY Code");
+                    AmountSubjecttoSalesTaxCaption := STRSUBSTNO(AmountSubjecttoSalesTaxCaptionTxt, GLSetup."LCY Code");
                 END
-                ELSE
-                BEGIN
-                    TotalCaption:=STRSUBSTNO(TotalCaptionTxt, "Currency Code");
-                    AmountExemptfromSalesTaxCaption:=STRSUBSTNO(AmountExemptfromSalesTaxCaption, "Currency Code");
-                    AmountSubjecttoSalesTaxCaption:=STRSUBSTNO(AmountSubjecttoSalesTaxCaption, "Currency Code");
+                ELSE BEGIN
+                    TotalCaption := STRSUBSTNO(TotalCaptionTxt, "Currency Code");
+                    AmountExemptfromSalesTaxCaption := STRSUBSTNO(AmountExemptfromSalesTaxCaption, "Currency Code");
+                    AmountSubjecttoSalesTaxCaption := STRSUBSTNO(AmountSubjecttoSalesTaxCaption, "Currency Code");
                 END;
                 GetLineFeeNoteOnReportHist("No.");
-                IF LogInteraction THEN IF NOT CurrReport.PREVIEW THEN BEGIN
-                        IF "Bill-to Contact No." <> '' THEN SegManagement.LogDocument(4, "No.", 0, 0, DATABASE::Contact, "Bill-to Contact No.", "Salesperson Code", "Campaign No.", "Posting Description", '')
+                IF LogInteraction THEN
+                    IF NOT CurrReport.PREVIEW THEN BEGIN
+                        IF "Bill-to Contact No." <> '' THEN
+                            SegManagement.LogDocument(4, "No.", 0, 0, DATABASE::Contact, "Bill-to Contact No.", "Salesperson Code", "Campaign No.", "Posting Description", '')
                         ELSE
                             SegManagement.LogDocument(4, "No.", 0, 0, DATABASE::Customer, "Bill-to Customer No.", "Salesperson Code", "Campaign No.", "Posting Description", '');
                     END;
                 CLEAR(BreakdownTitle);
                 CLEAR(BreakdownLabel);
                 CLEAR(BreakdownAmt);
-                TotalTaxLabel:=Text008;
-                TaxRegNo:='';
-                TaxRegLabel:='';
+                TotalTaxLabel := Text008;
+                TaxRegNo := '';
+                TaxRegLabel := '';
                 IF "Tax Area Code" <> '' THEN BEGIN
                     TaxArea.GET("Tax Area Code");
-                    CASE TaxArea."Country/Region" OF TaxArea."Country/Region"::US: TotalTaxLabel:=Text005;
-                    TaxArea."Country/Region"::CA: BEGIN
-                        TotalTaxLabel:=Text007;
-                        TaxRegNo:=CompanyInformation."VAT Registration No.";
-                        TaxRegLabel:=CompanyInformation.FIELDCAPTION("VAT Registration No.");
-                    END;
+                    CASE TaxArea."Country/Region" OF
+                        TaxArea."Country/Region"::US:
+                            TotalTaxLabel := Text005;
+                        TaxArea."Country/Region"::CA:
+                            BEGIN
+                                TotalTaxLabel := Text007;
+                                TaxRegNo := CompanyInformation."VAT Registration No.";
+                                TaxRegLabel := CompanyInformation.FIELDCAPTION("VAT Registration No.");
+                            END;
                     END;
                     SalesTaxCalc.StartSalesTaxCalculation;
-                    IF TaxArea."Use External Tax Engine" THEN SalesTaxCalc.CallExternalTaxEngineForDoc(DATABASE::"Sales Invoice Header", 0, "No.")
-                    ELSE
-                    BEGIN
+                    IF TaxArea."Use External Tax Engine" THEN
+                        SalesTaxCalc.CallExternalTaxEngineForDoc(DATABASE::"Sales Invoice Header", 0, "No.")
+                    ELSE BEGIN
                         SalesTaxCalc.AddSalesInvoiceLines("No.");
                         SalesTaxCalc.EndSalesTaxCalculation("Posting Date");
                     END;
                     SalesTaxCalc.GetSummarizedSalesTaxTable(TempSalesTaxAmtLine);
-                    BrkIdx:=0;
-                    PrevPrintOrder:=0;
-                    PrevTaxPercent:=0;
+                    BrkIdx := 0;
+                    PrevPrintOrder := 0;
+                    PrevTaxPercent := 0;
                     WITH TempSalesTaxAmtLine DO BEGIN
                         RESET;
                         SETCURRENTKEY("Print Order", "Tax Area Code for Key", "Tax Jurisdiction Code");
-                        IF FIND('-')THEN REPEAT IF("Print Order" = 0) OR ("Print Order" <> PrevPrintOrder) OR ("Tax %" <> PrevTaxPercent)THEN BEGIN
-                                    BrkIdx:=BrkIdx + 1;
+                        IF FIND('-') THEN
+                            REPEAT
+                                IF ("Print Order" = 0) OR ("Print Order" <> PrevPrintOrder) OR ("Tax %" <> PrevTaxPercent) THEN BEGIN
+                                    BrkIdx := BrkIdx + 1;
                                     IF BrkIdx > 1 THEN BEGIN
-                                        IF TaxArea."Country/Region" = TaxArea."Country/Region"::CA THEN BreakdownTitle:=Text006
+                                        IF TaxArea."Country/Region" = TaxArea."Country/Region"::CA THEN
+                                            BreakdownTitle := Text006
                                         ELSE
-                                            BreakdownTitle:=Text003;
+                                            BreakdownTitle := Text003;
                                     END;
-                                    IF BrkIdx > ARRAYLEN(BreakdownAmt)THEN BEGIN
-                                        BrkIdx:=BrkIdx - 1;
-                                        BreakdownLabel[BrkIdx]:=Text004;
+                                    IF BrkIdx > ARRAYLEN(BreakdownAmt) THEN BEGIN
+                                        BrkIdx := BrkIdx - 1;
+                                        BreakdownLabel[BrkIdx] := Text004;
                                     END
                                     ELSE
-                                        BreakdownLabel[BrkIdx]:=STRSUBSTNO("Print Description", "Tax %");
+                                        BreakdownLabel[BrkIdx] := STRSUBSTNO("Print Description", "Tax %");
                                 END;
-                                BreakdownAmt[BrkIdx]:=BreakdownAmt[BrkIdx] + "Tax Amount";
+                                BreakdownAmt[BrkIdx] := BreakdownAmt[BrkIdx] + "Tax Amount";
                             UNTIL NEXT = 0;
                     END;
                     IF BrkIdx = 1 THEN BEGIN
@@ -849,14 +880,15 @@ report 50700 "Mcd Sales Invoice"
         }
         trigger OnInit()
         begin
-            LogInteractionEnable:=TRUE;
+            LogInteractionEnable := TRUE;
             OnAfterInitialize(NoCopies, PrintCompany);
         end;
+
         trigger OnOpenPage()
         begin
             InitLogInteraction;
-            LogInteractionEnable:=LogInteraction;
-            PrintCompany:=true;
+            LogInteractionEnable := LogInteraction;
+            PrintCompany := true;
         end;
     }
     labels
@@ -866,145 +898,157 @@ report 50700 "Mcd Sales Invoice"
     begin
         GLSetup.GET;
     end;
+
     trigger OnPreReport()
     begin
         ShipmentLine.SETCURRENTKEY("Order No.", "Order Line No.");
         IF NOT CurrReport.USEREQUESTPAGE THEN InitLogInteraction;
         CompanyInformation.GET;
         SalesSetup.GET;
-        CASE SalesSetup."Logo Position on Documents" OF SalesSetup."Logo Position on Documents"::"No Logo": ;
-        SalesSetup."Logo Position on Documents"::Left: BEGIN
-            CompanyInfo3.GET;
-            CompanyInfo3.CALCFIELDS(Picture);
+        CASE SalesSetup."Logo Position on Documents" OF
+            SalesSetup."Logo Position on Documents"::"No Logo":
+                ;
+            SalesSetup."Logo Position on Documents"::Left:
+                BEGIN
+                    CompanyInfo3.GET;
+                    CompanyInfo3.CALCFIELDS(Picture);
+                END;
+            SalesSetup."Logo Position on Documents"::Center:
+                BEGIN
+                    CompanyInfo1.GET;
+                    CompanyInfo1.CALCFIELDS(Picture);
+                END;
+            SalesSetup."Logo Position on Documents"::Right:
+                BEGIN
+                    CompanyInfo2.GET;
+                    CompanyInfo2.CALCFIELDS(Picture);
+                END;
         END;
-        SalesSetup."Logo Position on Documents"::Center: BEGIN
-            CompanyInfo1.GET;
-            CompanyInfo1.CALCFIELDS(Picture);
-        END;
-        SalesSetup."Logo Position on Documents"::Right: BEGIN
-            CompanyInfo2.GET;
-            CompanyInfo2.CALCFIELDS(Picture);
-        END;
-        END;
-        IF PrintCompany THEN FormatAddress.Company(CompanyAddress, CompanyInformation)
+        IF PrintCompany THEN
+            FormatAddress.Company(CompanyAddress, CompanyInformation)
         ELSE
             CLEAR(CompanyAddress);
-        Text000:='COPY';
+        Text000 := 'COPY';
     end;
-    protected var Text000: Text[30]; //Label 'COPY';
-    CopyTxt: Text;
-    CopyNo: Integer;
-    PrintSerial: Boolean;
-    NoCopies: Integer;
-    PrintCompany: Boolean;
-    LogInteraction: Boolean;
-    [InDataSet]
-    DisplayAssemblyInformation: Boolean;
-    DisplayAdditionalFeeNote: Boolean;
-    showremain: Boolean;
-    ilerec: Record "Item Ledger Entry";
-    i: Integer;
-    serialtext: Text[240];
-    TaxLiable: Decimal;
-    OrderedQuantity: Decimal;
-    UnitPriceToPrint: Decimal;
-    AmountExclInvDisc: Decimal;
-    ShipmentMethod: Record "Shipment Method";
-    PaymentTerms: Record "Payment Terms";
-    SalesPurchPerson: Record "Salesperson/Purchaser";
-    CompanyInformation: Record "Company Information";
-    CompanyInfo3: Record "Company Information";
-    CompanyInfo1: Record "Company Information";
-    CompanyInfo2: Record "Company Information";
-    SalesSetup: Record "Sales & Receivables Setup";
-    Customer: Record Customer;
-    OrderLine: Record "Sales Line";
-    ShipmentLine: Record "Sales Shipment Line";
-    TempSalesInvoiceLine: Record "Sales INvoice Line" temporary;
-    TempSalesInvoiceLineAsm: Record "Sales Invoice Line" temporary;
-    RespCenter: Record "Responsibility Center";
-    Language: Record Language;
-    TempSalesTaxAmtLine: Record "Sales Tax Amount Line" temporary;
-    TaxArea: Record "Tax Area";
-    Cust: Record Customer;
-    TempPostedAsmLine: Record "Posted Assembly Line" temporary;
-    TempLineFeeNoteOnReportHist: Record "Line Fee Note on Report Hist." temporary;
-    GLSetup: Record "General Ledger Setup";
-    CompanyAddress: array[8]of Text[100];
-    BillToAddress: array[8]of Text[100];
-    ShipToAddress: array[8]of Text[100];
-    DescriptionToPrint: Text[210];
-    HighDescriptionToPrint: Text[210];
-    LowDescriptionToPrint: Text[210];
-    NoLoops: Integer;
-    NumberOfLines: Integer;
-    OnLineNumber: Integer;
-    HighestLineNo: Integer;
-    SpacePointer: Integer;
-    SalesInvPrinted: Codeunit "Sales Inv.-Printed";
-    TaxRegNo: Text;
-    TaxRegLabel: Text;
-    TotalTaxLabel: Text;
-    BreakdownTitle: Text;
-    BreakdownLabel: array[4]of Text;
-    BreakdownAmt: array[4]of Decimal;
-    Text003: Label 'Sales Tax Breakdown:';
-    Text004: Label 'Other Taxes';
-    BrkIdx: Integer;
-    PrevPrintOrder: Integer;
-    PrevTaxPercent: Decimal;
-    Text005: Label 'Total Sales Tax:';
-    Text006: Label 'Tax Breakdown:';
-    Text007: Label 'Total Tax:';
-    Text008: Label 'Tax:';
-    Text009: Label 'VOID INVOICE';
-    DocumentText: Text[20];
-    USText000: Label 'SALES INVOICE';
-    USText001: Label 'PREPAYMENT REQUEST';
-    [InDataSet]
-    LogInteractionEnable: Boolean;
-    BillCaptionLbl: Label 'Bill';
-    ToCaptionLbl: Label 'To:';
-    ShipViaCaptionLbl: Label 'SHIP VIA';
-    ShipDateCaptionLbl: Label 'SHIP DATE';
-    DueDateCaptionLbl: Label 'DUE DATE';
-    TermsCaptionLbl: Label 'TERMS';
-    CustomerIDCaptionLbl: Label 'CUSTOMER NO.';
-    PONumberCaptionLbl: Label 'P.O. NO.';
-    PODateCaptionLbl: Label 'P.O. Date';
-    OurOrderNoCaptionLbl: Label 'Our Order No.';
-    SalesPersonCaptionLbl: Label 'SALESPERSON';
-    ShipCaptionLbl: Label 'Ship';
-    InvoiceNumberCaptionLbl: Label 'INVOICE NO.';
-    InvoiceDateCaptionLbl: Label 'DATE';
-    PageCaptionLbl: Label 'Page:';
-    TaxIdentTypeCaptionLbl: Label 'Tax Ident. Type';
-    ItemDescriptionCaptionLbl: Label 'Item/Description';
-    UnitCaptionLbl: Label 'Unit';
-    OrderQtyCaptionLbl: Label 'Order Qty';
-    QuantityCaptionLbl: Label 'Quantity';
-    UnitPriceCaptionLbl: Label 'Unit Price';
-    TotalPriceCaptionLbl: Label 'Total Price';
-    SubtotalCaptionLbl: Label 'Subtotal:';
-    InvoiceDiscountCaptionLbl: Label 'Invoice Discount:';
-    TotalCaptionTxt: Label 'Total %1:';
-    AmountSubjecttoSalesTaxCaptionTxt: Label 'Amount Subject to Sales Tax %1';
-    AmountExemptfromSalesTaxCaptionTxt: Label 'Amount Exempt from Sales Tax %1';
-    TotalCaption: Text;
-    AmountSubjecttoSalesTaxCaption: Text;
-    AmountExemptfromSalesTaxCaption: Text;
-    j: Integer;
-    payamount: Decimal;
-    remainamount: Decimal;
-    remainint: Integer;
-    skipzerolines: boolean;
-    FormatAddress: Codeunit "Format Address";
-    SalesTaxCalc: Codeunit "Sales Tax Calculate";
-    SegManagement: Codeunit SegManagement;
-    var procedure InitLogInteraction()
+
+    protected var
+        Text000: Text[30]; //Label 'COPY';
+        CopyTxt: Text;
+        CopyNo: Integer;
+        PrintSerial: Boolean;
+        NoCopies: Integer;
+        PrintCompany: Boolean;
+        LogInteraction: Boolean;
+        [InDataSet]
+        DisplayAssemblyInformation: Boolean;
+        DisplayAdditionalFeeNote: Boolean;
+        showremain: Boolean;
+        ilerec: Record "Item Ledger Entry";
+        i: Integer;
+        serialtext: Text[240];
+        TaxLiable: Decimal;
+        OrderedQuantity: Decimal;
+        UnitPriceToPrint: Decimal;
+        AmountExclInvDisc: Decimal;
+        ShipmentMethod: Record "Shipment Method";
+        PaymentTerms: Record "Payment Terms";
+        SalesPurchPerson: Record "Salesperson/Purchaser";
+        CompanyInformation: Record "Company Information";
+        CompanyInfo3: Record "Company Information";
+        CompanyInfo1: Record "Company Information";
+        CompanyInfo2: Record "Company Information";
+        SalesSetup: Record "Sales & Receivables Setup";
+        Customer: Record Customer;
+        OrderLine: Record "Sales Line";
+        ShipmentLine: Record "Sales Shipment Line";
+        TempSalesInvoiceLine: Record "Sales INvoice Line" temporary;
+        TempSalesInvoiceLineAsm: Record "Sales Invoice Line" temporary;
+        RespCenter: Record "Responsibility Center";
+        Language: Record Language;
+        TempSalesTaxAmtLine: Record "Sales Tax Amount Line" temporary;
+        TaxArea: Record "Tax Area";
+        Cust: Record Customer;
+        TempPostedAsmLine: Record "Posted Assembly Line" temporary;
+        TempLineFeeNoteOnReportHist: Record "Line Fee Note on Report Hist." temporary;
+        GLSetup: Record "General Ledger Setup";
+        CompanyAddress: array[8] of Text[100];
+        BillToAddress: array[8] of Text[100];
+        ShipToAddress: array[8] of Text[100];
+        DescriptionToPrint: Text[210];
+        HighDescriptionToPrint: Text[210];
+        LowDescriptionToPrint: Text[210];
+        NoLoops: Integer;
+        NumberOfLines: Integer;
+        OnLineNumber: Integer;
+        HighestLineNo: Integer;
+        SpacePointer: Integer;
+        SalesInvPrinted: Codeunit "Sales Inv.-Printed";
+        TaxRegNo: Text;
+        TaxRegLabel: Text;
+        TotalTaxLabel: Text;
+        BreakdownTitle: Text;
+        BreakdownLabel: array[4] of Text;
+        BreakdownAmt: array[4] of Decimal;
+        Text003: Label 'Sales Tax Breakdown:';
+        Text004: Label 'Other Taxes';
+        BrkIdx: Integer;
+        PrevPrintOrder: Integer;
+        PrevTaxPercent: Decimal;
+        Text005: Label 'Total Sales Tax:';
+        Text006: Label 'Tax Breakdown:';
+        Text007: Label 'Total Tax:';
+        Text008: Label 'Tax:';
+        Text009: Label 'VOID INVOICE';
+        DocumentText: Text[20];
+        USText000: Label 'SALES INVOICE';
+        USText001: Label 'PREPAYMENT REQUEST';
+        [InDataSet]
+        LogInteractionEnable: Boolean;
+        BillCaptionLbl: Label 'Bill';
+        ToCaptionLbl: Label 'To:';
+        ShipViaCaptionLbl: Label 'SHIP VIA';
+        ShipDateCaptionLbl: Label 'SHIP DATE';
+        DueDateCaptionLbl: Label 'DUE DATE';
+        TermsCaptionLbl: Label 'TERMS';
+        CustomerIDCaptionLbl: Label 'CUSTOMER NO.';
+        PONumberCaptionLbl: Label 'P.O. NO.';
+        PODateCaptionLbl: Label 'P.O. Date';
+        OurOrderNoCaptionLbl: Label 'Our Order No.';
+        SalesPersonCaptionLbl: Label 'SALESPERSON';
+        ShipCaptionLbl: Label 'Ship';
+        InvoiceNumberCaptionLbl: Label 'INVOICE NO.';
+        InvoiceDateCaptionLbl: Label 'DATE';
+        PageCaptionLbl: Label 'Page:';
+        TaxIdentTypeCaptionLbl: Label 'Tax Ident. Type';
+        ItemDescriptionCaptionLbl: Label 'Item/Description';
+        UnitCaptionLbl: Label 'Unit';
+        OrderQtyCaptionLbl: Label 'Order Qty';
+        QuantityCaptionLbl: Label 'Quantity';
+        UnitPriceCaptionLbl: Label 'Unit Price';
+        TotalPriceCaptionLbl: Label 'Total Price';
+        SubtotalCaptionLbl: Label 'Subtotal:';
+        InvoiceDiscountCaptionLbl: Label 'Invoice Discount:';
+        TotalCaptionTxt: Label 'Total %1:';
+        AmountSubjecttoSalesTaxCaptionTxt: Label 'Amount Subject to Sales Tax %1';
+        AmountExemptfromSalesTaxCaptionTxt: Label 'Amount Exempt from Sales Tax %1';
+        TotalCaption: Text;
+        AmountSubjecttoSalesTaxCaption: Text;
+        AmountExemptfromSalesTaxCaption: Text;
+        j: Integer;
+        payamount: Decimal;
+        remainamount: Decimal;
+        remainint: Integer;
+        skipzerolines: boolean;
+        FormatAddress: Codeunit "Format Address";
+        SalesTaxCalc: Codeunit "Sales Tax Calculate";
+        SegManagement: Codeunit SegManagement;
+
+    var
+    procedure InitLogInteraction()
     begin
-        LogInteraction:=SegManagement.FindInteractTmplCode(4) <> '';
+        LogInteraction := SegManagement.FindInteractionTemplateCode(Enum::"Interaction Log Entry Document Type"::"Sales Inv.") <> '';
     end;
+
     procedure CollectAsmInformation(TempSalesInvoiceLine: Record "Sales Invoice Line" temporary)
     var
         ValueEntry: Record "Value Entry";
@@ -1016,7 +1060,7 @@ report 50700 "Mcd Sales Invoice"
     begin
         TempPostedAsmLine.DELETEALL;
         IF NOT DisplayAssemblyInformation THEN EXIT;
-        IF NOT TempSalesInvoiceLineAsm.GET(TempSalesInvoiceLine."Document No.", TempSalesInvoiceLine."Line No.")THEN EXIT;
+        IF NOT TempSalesInvoiceLineAsm.GET(TempSalesInvoiceLine."Document No.", TempSalesInvoiceLine."Line No.") THEN EXIT;
         SalesInvoiceLine.GET(TempSalesInvoiceLineAsm."Document No.", TempSalesInvoiceLineAsm."Line No.");
         IF SalesInvoiceLine.Type <> SalesInvoiceLine.Type::Item THEN EXIT;
         WITH ValueEntry DO BEGIN
@@ -1027,16 +1071,21 @@ report 50700 "Mcd Sales Invoice"
             SETRANGE("Applies-to Entry", 0);
             IF NOT FINDSET THEN EXIT;
         END;
-        REPEAT IF ItemLedgerEntry.GET(ValueEntry."Item Ledger Entry No.")THEN IF ItemLedgerEntry."Document Type" = ItemLedgerEntry."Document Type"::"Sales Shipment" THEN BEGIN
+        REPEAT
+            IF ItemLedgerEntry.GET(ValueEntry."Item Ledger Entry No.") THEN
+                IF ItemLedgerEntry."Document Type" = ItemLedgerEntry."Document Type"::"Sales Shipment" THEN BEGIN
                     SalesShipmentLine.GET(ItemLedgerEntry."Document No.", ItemLedgerEntry."Document Line No.");
-                    IF SalesShipmentLine.AsmToShipmentExists(PostedAsmHeader)THEN BEGIN
+                    IF SalesShipmentLine.AsmToShipmentExists(PostedAsmHeader) THEN BEGIN
                         PostedAsmLine.SETRANGE("Document No.", PostedAsmHeader."No.");
-                        IF PostedAsmLine.FINDSET THEN REPEAT TreatAsmLineBuffer(PostedAsmLine);
+                        IF PostedAsmLine.FINDSET THEN
+                            REPEAT
+                                TreatAsmLineBuffer(PostedAsmLine);
                             UNTIL PostedAsmLine.NEXT = 0;
                     END;
                 END;
         UNTIL ValueEntry.NEXT = 0;
     end;
+
     procedure TreatAsmLineBuffer(PostedAsmLine: Record "Posted Assembly Line")
     begin
         CLEAR(TempPostedAsmLine);
@@ -1046,25 +1095,29 @@ report 50700 "Mcd Sales Invoice"
         TempPostedAsmLine.SETRANGE(Description, PostedAsmLine.Description);
         TempPostedAsmLine.SETRANGE("Unit of Measure Code", PostedAsmLine."Unit of Measure Code");
         IF TempPostedAsmLine.FINDFIRST THEN BEGIN
-            TempPostedAsmLine.Quantity+=PostedAsmLine.Quantity;
+            TempPostedAsmLine.Quantity += PostedAsmLine.Quantity;
             TempPostedAsmLine.MODIFY;
         END
-        ELSE
-        BEGIN
+        ELSE BEGIN
             CLEAR(TempPostedAsmLine);
-            TempPostedAsmLine:=PostedAsmLine;
+            TempPostedAsmLine := PostedAsmLine;
             TempPostedAsmLine.INSERT;
         END;
     end;
-    procedure GetUOMText(UOMCode: Code[10]): Text[10]var
+
+    procedure GetUOMText(UOMCode: Code[10]): Text[10]
+    var
         UnitOfMeasure: Record "Unit of Measure";
     begin
-        IF NOT UnitOfMeasure.GET(UOMCode)THEN EXIT(UOMCode);
+        IF NOT UnitOfMeasure.GET(UOMCode) THEN EXIT(UOMCode);
         EXIT(UnitOfMeasure.Description);
     end;
-    procedure BlanksForIndent(): Text[10]begin
+
+    procedure BlanksForIndent(): Text[10]
+    begin
         EXIT(PADSTR('', 2, ' '));
     end;
+
     local procedure GetLineFeeNoteOnReportHist(SalesInvoiceHeaderNo: Code[20])
     var
         LineFeeNoteOnReportHist: Record "Line Fee Note on Report Hist.";
@@ -1075,30 +1128,34 @@ report 50700 "Mcd Sales Invoice"
         CustLedgerEntry.SETRANGE("Document Type", CustLedgerEntry."Document Type"::Invoice);
         CustLedgerEntry.SETRANGE("Document No.", SalesInvoiceHeaderNo);
         IF NOT CustLedgerEntry.FINDFIRST THEN EXIT;
-        IF NOT Customer.GET(CustLedgerEntry."Customer No.")THEN EXIT;
+        IF NOT Customer.GET(CustLedgerEntry."Customer No.") THEN EXIT;
         LineFeeNoteOnReportHist.SETRANGE("Cust. Ledger Entry No", CustLedgerEntry."Entry No.");
         LineFeeNoteOnReportHist.SETRANGE("Language Code", Customer."Language Code");
         IF LineFeeNoteOnReportHist.FINDSET THEN BEGIN
-            REPEAT TempLineFeeNoteOnReportHist.INIT;
+            REPEAT
+                TempLineFeeNoteOnReportHist.INIT;
                 TempLineFeeNoteOnReportHist.COPY(LineFeeNoteOnReportHist);
                 TempLineFeeNoteOnReportHist.INSERT;
             UNTIL LineFeeNoteOnReportHist.NEXT = 0;
         END
-        ELSE
-        BEGIN
+        ELSE BEGIN
             //LineFeeNoteOnReportHist.SETRANGE("Language Code",Language.GetUserLanguage);
-            IF LineFeeNoteOnReportHist.FINDSET THEN REPEAT TempLineFeeNoteOnReportHist.INIT;
+            IF LineFeeNoteOnReportHist.FINDSET THEN
+                REPEAT
+                    TempLineFeeNoteOnReportHist.INIT;
                     TempLineFeeNoteOnReportHist.COPY(LineFeeNoteOnReportHist);
                     TempLineFeeNoteOnReportHist.INSERT;
                 UNTIL LineFeeNoteOnReportHist.NEXT = 0;
         END;
     end;
+
     [IntegrationEvent(false, false)]
     local procedure OnAfterInitialize(var NoCopies: Integer; var PrintCompany: Boolean)
     begin
     end;
+
     [IntegrationEvent(false, false)]
-    local procedure SSI_Update_BillTo_ShipTo_Address(var BillToAddr: array[8]of Text[100]; var ShipToAddr: array[8]of Text[100]; var SalesInvHeader: Record "Sales Invoice Header")
+    local procedure SSI_Update_BillTo_ShipTo_Address(var BillToAddr: array[8] of Text[100]; var ShipToAddr: array[8] of Text[100]; var SalesInvHeader: Record "Sales Invoice Header")
     begin
     end;
 }
